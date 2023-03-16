@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:providers_app_news/src/models/news_models.dart';
 import 'package:http/http.dart' as http;
@@ -12,14 +14,22 @@ class news extends ChangeNotifier {
     this.getTopHeadLines();
   }
 
-  getTopHeadLines() async {
+  void getTopHeadLines() async {
     var url = Uri.https(URL, '/v2/top-headlines', {
       'country': 'us',
       'category': 'business',
       'apiKey': '5fc576b33fc643ec817a6191549cad2d'
     });
+
     final resp = await http.get(url);
-    final response = News.fromJson(resp.body);
-    //print('Response status: ${response.articles}');
+
+    if (resp.statusCode == 200) {
+      final data = jsonDecode(resp.body);
+      final response = News.fromJson(data);
+      Headlines.addAll(response.articles!);
+      print('Response status: ${Headlines[1].author}');
+    } else {
+      print("something bad");
+    }
   }
 }

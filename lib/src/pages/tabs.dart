@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:providers_app_news/src/pages/tab1.dart';
 import 'package:providers_app_news/src/services/news.dart';
 
 class tabs extends StatelessWidget {
@@ -7,8 +8,6 @@ class tabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<news>(context);
-
     return ChangeNotifierProvider(
       create: (_) => _page_current(),
       child: Scaffold(
@@ -25,13 +24,14 @@ class _PageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<_page_current>(context);
+    final ListHeadLines = Provider.of<news>(context).Headlines;
 
     return PageView(
       controller: provider._pageControllers,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        Container(
-          color: Colors.red,
+        tabs1(
+          headlines: ListHeadLines,
         ),
         Container(
           color: Colors.green,
@@ -53,9 +53,8 @@ class _BottomNavigationBar extends StatelessWidget {
       },
       items: const [
         BottomNavigationBarItem(
-            icon: Icon(Icons.person_2_outlined), label: "Add"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.access_alarm), label: "delete"),
+            icon: Icon(Icons.person_2_outlined), label: "Para ti"),
+        BottomNavigationBarItem(icon: Icon(Icons.map_rounded), label: "Global"),
       ],
     );
   }
